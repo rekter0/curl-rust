@@ -43,6 +43,7 @@ cc = "1.0"
 default = ["ssl"]
 ssl = ["openssl-sys"]
 http2 = ["libnghttp2-sys"]
+http3 = []
 mesalink = []
 rustls = ["rustls-ffi"]
 static-curl = []

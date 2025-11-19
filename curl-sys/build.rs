@@ -277,6 +277,24 @@ fn main() {
         }
     }
 
+    if cfg!(feature = "http3") {
+        cfg.define("USE_NGHTTP3", None)
+            .define("USE_NGTCP2", None)
+            .define("NGHTTP3_STATICLIB", None)
+            .define("NGTCP2_STATICLIB", None);
+
+        println!("cargo:rustc-cfg=link_libnghttp3");
+        println!("cargo:rustc-cfg=link_libngtcp2");
+        if let Some(path) = env::var_os("DEP_NGHTTP3_ROOT") {
+            let path = PathBuf::from(path);
+            cfg.include(path.join("include"));
+        }
+        if let Some(path) = env::var_os("DEP_NGTCP2_ROOT") {
+            let path = PathBuf::from(path);
+            cfg.include(path.join("include"));
+        }
+    }
+
     println!("cargo:rustc-cfg=link_libz");
     if let Some(path) = env::var_os("DEP_Z_INCLUDE") {
         cfg.include(path);
