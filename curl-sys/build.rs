@@ -285,6 +285,27 @@ fn main() {
 
         println!("cargo:rustc-cfg=link_libnghttp3");
         println!("cargo:rustc-cfg=link_libngtcp2");
+
+        // Link HTTP/3 libraries
+        println!("cargo:rustc-link-lib=static=nghttp3");
+        println!("cargo:rustc-link-lib=static=ngtcp2");
+        println!("cargo:rustc-link-lib=static=ngtcp2_crypto_ossl");
+
+        // Add library search paths for HTTP/3 libraries
+        if let Some(path) = env::var_os("DEP_NGHTTP3_ROOT") {
+            let path = PathBuf::from(path);
+            println!(
+                "cargo:rustc-link-search=native={}",
+                path.join("lib").display()
+            );
+        }
+        if let Some(path) = env::var_os("DEP_NGTCP2_ROOT") {
+            let path = PathBuf::from(path);
+            println!(
+                "cargo:rustc-link-search=native={}",
+                path.join("lib").display()
+            );
+        }
         if let Some(path) = env::var_os("DEP_NGHTTP3_ROOT") {
             let path = PathBuf::from(path);
             cfg.include(path.join("include"));
